@@ -1,4 +1,4 @@
-
+const getDataFrom1C = require('./fetch1C')
 const {Index, format} = require('./totals');
 
 /**
@@ -94,6 +94,7 @@ class Subscriber {
     const keys = queue.map(({id}) => `bar|${id.split('|')[1]}`);
     try {
       const bars = await events.allDocs({keys, include_docs: true});
+      const data1c = await getDataFrom1C();
       for(const change of queue) {
         const {id, doc: {user, place, work_center, person}} = change;
         const [moment, bar] = id.split('|');
@@ -102,7 +103,7 @@ class Subscriber {
         if(bdoc?.doc) {
           const {characteristic, cnstr, elm, specimen} = bdoc.doc;
           if(specimen) {
-            index.add({moment, place, work_center, person, characteristic, specimen, stack});
+            index.add({moment, place, work_center, person, characteristic, specimen, stack, data1c});
           }
           since.conf.since = change.seq;
         }

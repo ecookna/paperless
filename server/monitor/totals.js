@@ -34,6 +34,7 @@ class Index {
     this.post_event = post_event;
     this.dates = new Map();
     this.last = {};
+    this.xdat = [];
   }
 
   root(date) {
@@ -67,7 +68,8 @@ class Index {
    * @param specimen
    * @param stack
    */
-  add({moment, place, work_center, person, characteristic, specimen, stack}) {
+  add({moment, place, work_center, person, characteristic, specimen, stack, data1c}) {
+    this.xdat = data1c;
     const md = this.utils.moment(moment, 'YYYYMMDDHHmmssSSS');
     const hour = md.hour();
     let shift = 1;
@@ -177,6 +179,7 @@ class Index {
       hour: hour_rows.length,
       last: lastMomentTime?.format('HH:mm:ss'),
       pause: formattedMomentDuration(delta),
+      data1c: this.xdat,
       totals: {},
     };
 
